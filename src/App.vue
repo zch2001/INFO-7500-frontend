@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Sidebar from './components/Sidebar.vue'; // 引入 Sidebar 组件
+import Sidebar from './components/SideBar.vue'; // 引入 Sidebar 组件
 
 export default defineComponent({
   name: 'App',
