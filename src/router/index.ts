@@ -5,7 +5,7 @@ import TBD from '@/components/TBD.vue';
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
-        redirect: '/bestten', // 重定向到 BestTen 页面
+        redirect: '/tbd',
     },
     {
         path: '/bestten',
