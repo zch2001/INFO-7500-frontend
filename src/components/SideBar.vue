@@ -1,10 +1,10 @@
 <template>
   <el-menu default-active="bestten" class="el-menu-vertical-demo">
-    <el-menu-item index="bestten" @click="navigateTo('bestten')">
-      Best 10 Blocks
-    </el-menu-item>
     <el-menu-item index="tbd" @click="navigateTo('tbd')">
       Dashboard
+    </el-menu-item>
+    <el-menu-item index="bestten" @click="navigateTo('bestten')">
+      Best 10 Blocks
     </el-menu-item>
   </el-menu>
 </template>

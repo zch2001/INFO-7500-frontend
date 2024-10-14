@@ -3,6 +3,7 @@
     <el-row>
       <el-col :span="24" class="header">
         <h2>Bitcoin Price Chart</h2>
+        <!-- 按钮组 -->
         <el-button-group>
           <el-button @click="updateChart('1')">1D</el-button>
           <el-button @click="updateChart('7')">1W</el-button>
@@ -41,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref, onUnmounted } from 'vue';
 import * as echarts from 'echarts';
 
 interface StatsData {
@@ -65,8 +66,8 @@ export default defineComponent({
       total_supply: '0',
     });
 
-    // 默认天数，默认为 30 天
-    const days = ref('30');
+    const days = ref('30'); // 默认天数
+    let intervalId: number;
 
     const fetchPriceData = async (days: string) => {
       const response = await fetch(
@@ -95,24 +96,23 @@ export default defineComponent({
     };
 
     const drawChart = async () => {
+      console.log('reload');
       const priceData = await fetchPriceData(days.value);
       const chartDom = document.getElementById('price-chart') as HTMLElement;
       const chartInstance = echarts.init(chartDom);
 
-      // 获取数据中的最大和最小价格
       const minPrice = Math.min(...priceData.map((item) => item.price));
       const maxPrice = Math.max(...priceData.map((item) => item.price));
 
-      // 设置 x 轴的单位
       let xAxisInterval;
       if (days.value === '1') {
-        xAxisInterval = 2 * 60 * 60 * 1000; // 1D, 每2小时一个刻度
+        xAxisInterval = 2 * 60 * 60 * 1000;
       } else if (days.value === '7') {
-        xAxisInterval = 24 * 60 * 60 * 1000; // 1W, 每天一个刻度
+        xAxisInterval = 24 * 60 * 60 * 1000;
       } else if (days.value === '30') {
-        xAxisInterval = 7 * 24 * 60 * 60 * 1000; // 1M, 每周一个刻度
+        xAxisInterval = 7 * 24 * 60 * 60 * 1000;
       } else {
-        xAxisInterval = 30 * 24 * 60 * 60 * 1000; // 1Y, 每月一个刻度
+        xAxisInterval = 30 * 24 * 60 * 60 * 1000;
       }
 
       const option = {
@@ -126,10 +126,10 @@ export default defineComponent({
             formatter: (value: number) => {
               const date = new Date(value);
               return days.value === '1'
-                  ? date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })  // 精确到分钟
-                  : date.toLocaleDateString(); // 根据天数格式化日期
+                  ? date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                  : date.toLocaleDateString();
             },
-            interval: xAxisInterval, // 根据选择的天数动态设置刻度
+            interval: xAxisInterval,
           },
         },
         yAxis: {
@@ -139,11 +139,11 @@ export default defineComponent({
         },
         series: [
           {
-            data: priceData.map((item: any) => [item.date.getTime(), item.price]), // x 轴使用时间戳，y 轴使用价格
+            data: priceData.map((item: any) => [item.date.getTime(), item.price]),
             type: 'line',
             smooth: true,
             areaStyle: {
-              color: 'rgba(255, 165, 0, 0.5)', // 阴影颜色
+              color: 'rgba(255, 165, 0, 0.5)',
             },
           },
         ],
@@ -152,15 +152,26 @@ export default defineComponent({
       chartInstance.setOption(option);
     };
 
-    // 更新图表，根据按钮选择的天数重新绘制图表
     const updateChart = (newDays: string) => {
       days.value = newDays;
       drawChart();
     };
 
+    // 自动刷新功能，每 5 秒刷新一次
+    const startAutoRefresh = () => {
+      intervalId = setInterval(() => {
+        drawChart();
+      }, 5000);
+    };
+
     onMounted(async () => {
       await fetchStatsData();
       drawChart();
+      startAutoRefresh();
+    });
+
+    onUnmounted(() => {
+      clearInterval(intervalId);
     });
 
     return {

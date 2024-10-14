@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
 
 interface BlockData {
   id: number;
@@ -31,8 +31,10 @@ export default defineComponent({
   name: 'BestTen',
   setup() {
     const blockData = ref<BlockData[]>([]);
+    let intervalId: number;
 
     const fetchBlockInfos = async () => {
+      console.log('reload');
       try {
         const response = await fetch('https://demo.slightdream.com/api/get_data');
         if (!response.ok) throw new Error('Network response was not ok');
@@ -47,7 +49,20 @@ export default defineComponent({
       return new Date(row.timestamp * 1000).toLocaleString();
     };
 
-    onMounted(fetchBlockInfos);
+    const startAutoRefresh = () => {
+      intervalId = setInterval(() => {
+        fetchBlockInfos();
+      }, 5000);
+    };
+
+    onMounted(() => {
+      fetchBlockInfos();
+      startAutoRefresh();
+    });
+
+    onUnmounted(() => {
+      clearInterval(intervalId); // 清除定时器
+    });
 
     return {
       blockData,
