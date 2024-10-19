@@ -1,18 +1,16 @@
 <template>
-  <div class="common-layout" style="height: 100%;width: 100%">
-    <el-container style="height: 100vh;">
-      <el-header class="header">Bitcoin Explorer</el-header>
-      <el-container>
-        <el-aside width="200px">
-          <Sidebar />
-        </el-aside>
-        <el-main>
-          <router-view />
-        </el-main>
-      </el-container>
-      <el-footer class="footer">© 2024 Northeastern INFO7500</el-footer>
+  <el-container style="height: 100vh; width: 100vw;">
+    <el-header class="header">Bitcoin Explorer</el-header>
+    <el-container>
+      <el-aside style="width: 200px; padding: 0; margin: 0;">
+        <Sidebar />
+      </el-aside>
+      <el-main style="padding: 0; height: 100%; overflow: auto;">
+        <router-view />
+      </el-main>
     </el-container>
-  </div>
+    <el-footer class="footer">© 2024 Northeastern INFO7500</el-footer>
+  </el-container>
 </template>
 
 <script lang="ts">
@@ -32,11 +30,14 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  border: 0;
+  overflow: hidden;
 }
 
-
-.common-layout {
-  height: 100vh;
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .header {
@@ -44,6 +45,8 @@ html, body {
   color: white;
   text-align: center;
   line-height: 60px;
+  padding: 0;
+  margin: 0;
 }
 
 .footer {
@@ -51,5 +54,6 @@ html, body {
   color: white;
   text-align: center;
   line-height: 40px;
+  padding: 0;
 }
 </style>

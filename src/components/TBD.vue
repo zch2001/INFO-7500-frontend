@@ -19,23 +19,29 @@
     </el-row>
     <!-- 显示统计数据的部分 -->
     <el-row>
-      <el-col :span="8">
-        <h3> block_height {{ stats.block_height }}</h3>
+      <el-col :span="8" class="stats-item">
+        <div class="stats-value">{{ stats.block_height }}</div>
+        <div class="stats-label">Block Height</div>
       </el-col>
-      <el-col :span="8">
-        <h3> blockchain_size {{ stats.blockchain_size }}</h3>
+      <el-col :span="8" class="stats-item">
+        <div class="stats-value">{{ stats.blockchain_size }}</div>
+        <div class="stats-label">Blockchain Size</div>
       </el-col>
-      <el-col :span="8">
-        <h3> difficulty {{ stats.difficulty }}</h3>
+      <el-col :span="8" class="stats-item">
+        <div class="stats-value">{{ stats.difficulty }}</div>
+        <div class="stats-label">Difficulty</div>
       </el-col>
-      <el-col :span="8">
-        <h3> mempool_size {{ stats.mempool_size }}</h3>
+      <el-col :span="8" class="stats-item">
+        <div class="stats-value">{{ stats.mempool_size }}</div>
+        <div class="stats-label">Mempool Size</div>
       </el-col>
-      <el-col :span="8">
-        <h3> network_hashrate {{ stats.network_hashrate }}</h3>
+      <el-col :span="8" class="stats-item">
+        <div class="stats-value">{{ stats.network_hashrate }}</div>
+        <div class="stats-label">Network Hashrate</div>
       </el-col>
-      <el-col :span="8">
-        <h3> total_supply {{ stats.total_supply }}</h3>
+      <el-col :span="8" class="stats-item">
+        <div class="stats-value">{{ stats.total_supply }}</div>
+        <div class="stats-label">Total Supply</div>
       </el-col>
     </el-row>
   </div>
@@ -75,7 +81,7 @@ export default defineComponent({
       );
       const data = await response.json();
       const prices = data.prices.map((item: any) => ({
-        date: new Date(item[0]), // 将时间戳转为 Date 对象
+        date: new Date(item[0]),
         price: item[1],
       }));
 
@@ -96,13 +102,14 @@ export default defineComponent({
     };
 
     const drawChart = async () => {
-      console.log('reload');
       const priceData = await fetchPriceData(days.value);
       const chartDom = document.getElementById('price-chart') as HTMLElement;
       const chartInstance = echarts.init(chartDom);
 
-      const minPrice = Math.min(...priceData.map((item) => item.price));
-      const maxPrice = Math.max(...priceData.map((item) => item.price));
+      // const minPrice = Math.min(...priceData.map((item) => item.price));
+      // const maxPrice = Math.max(...priceData.map((item) => item.price));
+      const minPrice = Math.floor(Math.min(...priceData.map((item) => item.price))); // 取下限整数
+      const maxPrice = Math.ceil(Math.max(...priceData.map((item) => item.price))); // 取上限整数
 
       let xAxisInterval;
       if (days.value === '1') {
@@ -119,6 +126,12 @@ export default defineComponent({
         title: {
           text: `Bitcoin ${days.value} Day Price`,
           left: 'center',
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'line',
+          },
         },
         xAxis: {
           type: 'time',
@@ -145,6 +158,7 @@ export default defineComponent({
             areaStyle: {
               color: 'rgba(255, 165, 0, 0.5)',
             },
+            sampling: 'lttb', // 使用lttb算法来减少显示的点，简化折线
           },
         ],
       };
@@ -157,7 +171,6 @@ export default defineComponent({
       drawChart();
     };
 
-    // 自动刷新功能，每 5 秒刷新一次
     const startAutoRefresh = () => {
       intervalId = setInterval(() => {
         drawChart();
@@ -186,12 +199,40 @@ export default defineComponent({
 <style scoped>
 .tbd-page {
   padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.stats-item {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.stats-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+}
+
+.stats-label {
+  font-size: 14px;
+  color: #888;
+}
+
+.el-button-group {
+  margin-bottom: 20px;
 }
 
 #price-chart {
