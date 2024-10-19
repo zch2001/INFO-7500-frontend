@@ -1,6 +1,9 @@
 <template>
   <el-container style="height: 100vh; width: 100vw;">
-    <el-header class="header">Bitcoin Explorer</el-header>
+    <el-header class="header">
+      <img src="@/assets/Logo.png" alt="Logo" class="logo">
+      Bitcoin Explorer
+    </el-header>
     <el-container>
       <el-aside style="width: 200px; padding: 0; margin: 0;">
         <Sidebar />
@@ -47,6 +50,16 @@ html, body {
   line-height: 60px;
   padding: 0;
   margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative; /* 保证绝对定位的图标不会影响标题文本 */
+}
+
+.logo {
+  position: absolute; /* 图标绝对定位，放在最左边 */
+  left: 20px; /* 左边距 */
+  height: 40px; /* 图标高度 */
 }
 
 .footer {
