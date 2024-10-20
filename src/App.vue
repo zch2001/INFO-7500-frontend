@@ -1,5 +1,5 @@
 <template>
-  <el-container style="height: 100vh; width: 100vw;">
+  <el-container style="height: 100vh; margin: 0;">
     <el-header class="header">
       <img src="@/assets/Logo.png" alt="Logo" class="logo">
       Bitcoin Explorer
@@ -8,7 +8,7 @@
       <el-aside style="width: 200px; padding: 0; margin: 0;">
         <Sidebar />
       </el-aside>
-      <el-main style="padding: 0; height: 100%; overflow: auto;">
+      <el-main style="padding: 0; height: 100%;">
         <router-view />
       </el-main>
     </el-container>
@@ -34,7 +34,6 @@ html, body {
   margin: 0;
   padding: 0;
   border: 0;
-  overflow: hidden;
 }
 
 #app {

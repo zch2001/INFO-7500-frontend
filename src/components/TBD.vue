@@ -2,7 +2,7 @@
   <div class="tbd-page">
     <el-row>
       <el-col :span="24" class="header">
-        <h2>Bitcoin Price Chart</h2>
+        <h2 style="padding-left: 20px;">Bitcoin Price Chart</h2>
         <!-- 按钮组 -->
         <el-button-group>
           <el-button @click="updateChart('1')">1D</el-button>
@@ -198,7 +198,7 @@ export default defineComponent({
 
 <style scoped>
 .tbd-page {
-  padding: 20px;
+  padding: 0px;
   font-family: 'Poppins', sans-serif;
   color: #333;
 }
@@ -217,7 +217,7 @@ h2 {
 
 .stats-item {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 .stats-value {
