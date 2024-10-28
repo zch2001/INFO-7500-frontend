@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Best 10 Blocks</h1>
+    <h1 style="margin-left: 10px">Best 10 Blocks</h1>
     <el-table :data="blockData" style="width: 100%">
       <el-table-column prop="id" label="ID" width="50" />
       <el-table-column prop="height" label="Height" width="150" />
@@ -73,5 +73,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* 样式部分 */
+
 </style>
