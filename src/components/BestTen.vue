@@ -34,7 +34,7 @@ export default defineComponent({
     let intervalId: number;
 
     const fetchBlockInfos = async () => {
-      console.log('reload');
+      console.log('reloads');
       try {
         const response = await fetch('https://demo.slightdream.com/api/get_data');
         if (!response.ok) throw new Error('Network response was not ok');
